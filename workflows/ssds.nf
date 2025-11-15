@@ -115,14 +115,11 @@ workflow SSDS {
     //
     // MODULE/SUBWORKFLOW: Index genome if required, then run SSDS alignment sub-workflow    
     //    
-    
     if (params.bwa) {
         if (file(params.bwa).isFile()){ 
-            // If a single file is provided, stage the parent directory with all index files
-            ch_bwa = Channel.fromPath("${file(params.bwa).getParent()}/*").collect()
+            ch_bwa = file(params.bwa).getParent() 
         } else {
-            // If a directory is provided, stage all files within it
-            ch_bwa = Channel.fromPath("${params.bwa}/*").collect()
+            ch_bwa = file(params.bwa) 
         }
     } else {
         BWA_INDEX (
